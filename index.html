@@ -5,16 +5,799 @@
   <title>GMS合同会社 / GMSラボ｜デジタル歯科技工</title>
   <meta name="description" content="GMS合同会社（GMSラボ）は、ジルコニアを中心としたデジタル歯科技工に特化した技工所です。精度と再現性を重視した技工物を安定してご提供します。" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================
+       Base Variables & Reset
+       ========================================= */
+    :root {
+      --color-primary: #0056b3; /* Tech Blue */
+      --color-primary-dark: #003d80;
+      --color-accent: #00d4ff; /* Cyan for digital feel */
+      --color-text: #333333;
+      --color-text-light: #666666;
+      --color-bg: #ffffff;
+      --color-bg-alt: #f8f9fa;
+      --font-jp: 'Noto Sans JP', sans-serif;
+      --font-en: 'Montserrat', sans-serif;
+      --easing: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-jp);
+      color: var(--color-text);
+      line-height: 1.8;
+      background-color: var(--color-bg);
+      overflow-x: hidden; /* 横スクロール防止 */
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    ul, ol {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: bottom;
+    }
+
+    /* 共通クラス */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      padding: 100px 0;
+    }
+
+    .section-alt {
+      background-color: var(--color-bg-alt);
+    }
+
+    .sp-only { display: none; }
+    @media (max-width: 768px) {
+      .sp-only { display: block; }
+    }
+
+    /* =========================================
+       Animations (Scroll Trigger)
+       ========================================= */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s var(--easing), transform 0.8s var(--easing);
+    }
+    
+    .fade-up.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 順番に表示させるための遅延 */
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+
+    /* =========================================
+       Header (Glassmorphism)
+       ========================================= */
+    .site-header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .header-inner {
+      height: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-family: var(--font-en);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--color-primary);
+      letter-spacing: 0.05em;
+    }
+
+    .logo-mark {
+      background: var(--color-primary);
+      color: #fff;
+      padding: 2px 8px;
+      margin-right: 8px;
+      border-radius: 2px;
+    }
+
+    .main-nav ul {
+      display: flex;
+      gap: 30px;
+    }
+
+    .main-nav a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .main-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--color-primary);
+      transition: width 0.3s ease;
+    }
+
+    .main-nav a:hover {
+      color: var(--color-primary);
+    }
+
+    .main-nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile Nav Toggle */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 24px;
+      position: relative;
+      z-index: 1001;
+    }
+    
+    .nav-toggle span {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: var(--color-text);
+      transition: 0.3s;
+    }
+    .nav-toggle span:nth-child(1) { top: 0; }
+    .nav-toggle span:nth-child(2) { top: 11px; }
+    .nav-toggle span:nth-child(3) { bottom: 0; }
+
+    /* =========================================
+       Hero Section (Dynamic & Tech)
+       ========================================= */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      /* 背景にテック感のあるグラデーション、実画像がある場合はurl()で上書き推奨 */
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      overflow: hidden;
+    }
+
+    /* 背景の装飾的な動き */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, rgba(0,86,179,0) 70%);
+      border-radius: 50%;
+      animation: float 10s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 40px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-text {
+      flex: 1;
+      padding-right: 40px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-en);
+      color: var(--color-primary);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      margin-bottom: 20px;
+      display: inline-block;
+      position: relative;
+    }
+    
+    .hero-tagline::before {
+      content: '';
+      position: absolute;
+      left: -40px;
+      top: 50%;
+      width: 30px;
+      height: 1px;
+      background: var(--color-primary);
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, var(--color-text) 0%, var(--color-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-lead {
+      font-size: 1.1rem;
+      color: var(--color-text-light);
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn.primary {
+      background: var(--color-primary);
+      color: #fff;
+      border: 2px solid var(--color-primary);
+      box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
+    }
+
+    .btn.primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+      z-index: -1;
+    }
+
+    .btn.primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 86, 179, 0.5);
+    }
+
+    .btn.primary:hover::before {
+      left: 100%;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--color-primary);
+      border: 2px solid var(--color-primary);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(0, 86, 179, 0.05);
+      transform: translateY(-3px);
+    }
+    
+    .btn.full {
+      width: 100%;
+      display: block;
+    }
+
+    /* Hero Visual Placeholder */
+    .hero-visual {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-placeholder {
+      width: 400px;
+      height: 500px;
+      background: var(--color-text); /* 画像がない場合の仮背景 */
+      /* ここに実際の画像をセットする */
+      /* background-image: url('your-image.jpg'); */
+      background-size: cover;
+      color: rgba(255,255,255,0.1);
+      font-family: var(--font-en);
+      font-weight: 700;
+      font-size: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-radius: 20px;
+      box-shadow: 20px 20px 60px rgba(0,0,0,0.1), -20px -20px 60px rgba(255,255,255,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-placeholder::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(45deg, rgba(0,86,179,0.2), rgba(0,212,255,0.2));
+    }
+
+    /* =========================================
+       Typography & Section Titles
+       ========================================= */
+    .section-title {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .section-lead {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      color: var(--color-text-light);
+    }
+
+    /* =========================================
+       Services (Cards)
+       ========================================= */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: all 0.4s var(--easing);
+      border-top: 4px solid transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-top-color: var(--color-primary);
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .card h3::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 24px;
+      background: var(--color-accent);
+      margin-right: 12px;
+      border-radius: 4px;
+    }
+
+    .card ul {
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+
+    .card ul li {
+      list-style: disc;
+      margin-bottom: 8px;
+      color: var(--color-text-light);
+    }
+
+    /* =========================================
+       Strength & Grid
+       ========================================= */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .check-list li {
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .check-list li::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      color: var(--color-accent);
+      font-weight: bold;
+    }
+
+    /* =========================================
+       Gallery
+       ========================================= */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      display: block;
+      /* 画像がない場合のダミー背景 */
+      background-color: #ddd; 
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 10px;
+      font-size: 0.85rem;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-caption {
+      transform: translateY(0);
+    }
+
+    /* =========================================
+       Flow
+       ========================================= */
+    .flow-list {
+      counter-reset: flow-num;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* 左側の線 */
+    .flow-list::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 20px;
+      bottom: 20px;
+      width: 2px;
+      background: #e0e0e0;
+      z-index: 0;
+    }
+
+    .flow-list li {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      margin-left: 50px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .flow-list li:hover {
+      transform: translateX(10px);
+    }
+
+    .flow-list li h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--color-primary);
+    }
+
+    /* 数字の装飾 */
+    .flow-list li::before {
+      counter-increment: flow-num;
+      content: counter(flow-num);
+      position: absolute;
+      left: -50px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      font-weight: bold;
+      font-family: var(--font-en);
+      box-shadow: 0 0 0 5px #fff; /* 線を隠すための白枠 */
+    }
+
+    /* =========================================
+       Company Info
+       ========================================= */
+    .company-info {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-top: 1px solid #eee;
+    }
+
+    .company-info > div {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+    }
+
+    .company-info dt {
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    /* =========================================
+       Form
+       ========================================= */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 50px;
+    }
+
+    .contact-form {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .required {
+      background: #ff4d4f;
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    }
+
+    .contact-alt h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--color-accent);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    
+    .contact-alt p {
+      margin-bottom: 30px;
+    }
+
+    /* =========================================
+       Footer
+       ========================================= */
+    .site-footer {
+      background: var(--color-text);
+      color: #fff;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: var(--font-en);
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    /* =========================================
+       Responsive (Mobile)
+       ========================================= */
+    @media (max-width: 768px) {
+      .hero {
+        height: auto;
+        min-height: auto;
+        padding-top: 100px;
+        padding-bottom: 60px;
+      }
+      .hero-inner {
+        flex-direction: column;
+      }
+      .hero-text {
+        padding-right: 0;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .hero-placeholder {
+        width: 100%;
+        height: 300px;
+      }
+
+      .main-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        height: 100vh;
+        background: #fff;
+        padding: 80px 20px;
+        transition: right 0.4s ease;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+      }
+      
+      .main-nav.is-open {
+        right: 0;
+      }
+
+      .main-nav ul {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .nav-toggle {
+        display: block;
+      }
+      .nav-toggle.is-open span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 6px;
+      }
+      .nav-toggle.is-open span:nth-child(2) {
+        opacity: 0;
+      }
+      .nav-toggle.is-open span:nth-child(3) {
+        transform: rotate(-45deg);
+        bottom: 16px;
+      }
+
+      .grid-2, .contact-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .company-info > div {
+        grid-template-columns: 1fr;
+      }
+      .company-info dt {
+        margin-bottom: 5px;
+      }
+      
+      .flow-list li {
+        margin-left: 0;
+        padding-left: 20px;
+      }
+      .flow-list li::before {
+        position: static;
+        display: inline-block;
+        transform: none;
+        margin-right: 10px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 0.9rem;
+      }
+      .flow-list::before {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- ヘッダー -->
+
   <header class="site-header">
     <div class="container header-inner">
       <div class="logo">
-  <span class="logo-mark">GMS</span>
-  <span class="logo-text">GMS LAB</span>
-</div>
+        <span class="logo-mark">GMS</span>
+        <span class="logo-text">GMS LAB</span>
+      </div>
 
       <button class="nav-toggle" aria-label="メニューを開閉">
         <span></span><span></span><span></span>
@@ -35,10 +818,9 @@
   </header>
 
   <main>
-    <!-- TOP / ファーストビュー -->
     <section id="top" class="hero">
       <div class="container hero-inner">
-        <div class="hero-text">
+        <div class="hero-text fade-up">
           <p class="hero-tagline">Digital Dental Laboratory</p>
           <h1>デジタル技工の精度で、<br class="sp-only">歯科医療を支える。</h1>
           <p class="hero-lead">
@@ -47,41 +829,40 @@
           </p>
           <div class="hero-actions">
             <a href="#services" class="btn primary">技工サービスを見る</a>
-            <a href="#contact" class="btn secondary">お問い合わせはこちら</a>
+            <a href="#contact" class="btn secondary">お問い合わせ</a>
           </div>
         </div>
-        <div class="hero-visual">
-          <!-- ここに将来、MCX5や技工風景の画像を配置できます -->
+        <div class="hero-visual fade-up delay-200">
           <div class="hero-placeholder">
-            GMS LAB<br />Digital<br />Dental Lab
+            GMS LAB<br />Digital<br />System
           </div>
         </div>
       </div>
     </section>
 
-    <!-- GMSについて -->
     <section id="about" class="section">
       <div class="container">
-        <h2 class="section-title">GMS合同会社について</h2>
-        <p class="section-lead">
-          GMS合同会社（GMSラボ）は、デジタル技工を中心とした歯科技工物の製作を行う技工所として設立されました。
-        </p>
-        <p>
-          精度の高い技工物を安定して提供し、<br class="sp-only">
-          それぞれの歯科医院の診療スタイルに合わせた柔軟な対応を行うことを大切にしています。<br />
-          技術・設備・品質管理を追求し、歯科医療に携わる皆さまの<br class="sp-only">
-          「信頼できる技工パートナー」であり続けることを目指しています。
-        </p>
+        <div class="fade-up">
+          <h2 class="section-title">GMS合同会社について</h2>
+          <p class="section-lead">
+            GMS合同会社（GMSラボ）は、デジタル技工を中心とした歯科技工物の製作を行う技工所として設立されました。
+          </p>
+          <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <p>
+              精度の高い技工物を安定して提供し、それぞれの歯科医院の診療スタイルに合わせた柔軟な対応を行うことを大切にしています。<br /><br />
+              技術・設備・品質管理を追求し、歯科医療に携わる皆さまの「信頼できる技工パートナー」であり続けることを目指しています。
+            </p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- サービス -->
     <section id="services" class="section section-alt">
       <div class="container">
-        <h2 class="section-title">サービス</h2>
+        <h2 class="section-title fade-up">サービス</h2>
 
         <div class="cards">
-          <article class="card">
+          <article class="card fade-up delay-100">
             <h3>歯科技工サービス</h3>
             <p>
               デジタル技工に対応した高精度な技工物を提供しています。<br />
@@ -92,15 +873,14 @@
               <li>CAD/CAM冠</li>
               <li>インプラント上部構造</li>
               <li>テンポラリークラウン</li>
-              <li>デジタルデータ入稿への対応（順次拡大予定）</li>
+              <li>デジタルデータ入稿への対応</li>
             </ul>
           </article>
 
-          <article class="card">
+          <article class="card fade-up delay-200">
             <h3>管理支援サービス（準備中）</h3>
             <p>
-              医院運営に関わる管理支援サービスについては、<br />
-              将来的に段階的な提供を検討しています。<br />
+              医院運営に関わる管理支援サービスについては、将来的に段階的な提供を検討しています。<br />
               現在は準備中のため、詳細は追って本サイトにてご案内いたします。
             </p>
           </article>
@@ -108,151 +888,123 @@
       </div>
     </section>
 
-    <!-- GMSの強み・設備 -->
     <section id="strength" class="section">
       <div class="container">
-        <h2 class="section-title">GMSの強み・設備</h2>
+        <h2 class="section-title fade-up">GMSの強み・設備</h2>
 
         <div class="grid-2">
-          <div>
-            <h3>GMSの強み</h3>
+          <div class="fade-up delay-100">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--color-primary);">GMSの強み</h3>
             <ul class="check-list">
               <li>デジタル技工に特化した高精度ワークフロー</li>
               <li>安定した品質管理と再現性の高い技工物</li>
               <li>丁寧でスムーズなコミュニケーション</li>
             </ul>
-            <p>
-              技工物の適合・形態・強度などに関して一定の基準を設け、<br class="sp-only">
+            <p style="margin-top: 20px; color: var(--color-text-light);">
+              技工物の適合・形態・強度などに関して一定の基準を設け、
               安定した品質でお届けできるよう体制を整えています。
             </p>
           </div>
-          <div>
-            <h3>主な設備</h3>
-            <ul>
+          <div class="fade-up delay-200">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--color-primary);">主な設備</h3>
+            <ul class="check-list">
               <li>MCX5（歯科技工用ミリングマシン）</li>
               <li>CADソフト（Cares® など）</li>
               <li>各種焼成炉・研磨機器</li>
               <li>デジタルワークフロー対応機器（技工くん、MeditLink、DScoreなど）</li>
             </ul>
-            <p>※導入設備に応じて内容を随時更新いたします。</p>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #999;">※導入設備に応じて内容を随時更新いたします。</p>
           </div>
         </div>
       </div>
     </section>
-<!-- ギャラリー -->
-<section id="gallery" class="section">
-  <div class="container">
-    <h2 class="section-title">ギャラリー</h2>
-    <p class="section-lead">
-      技工士、設備、ラボ環境など、GMSラボの雰囲気をご紹介します。
-    </p>
 
-    <div class="gallery-grid">
-
-      <!-- 技工士 -->
-      <div class="gallery-item">
-        <img src="image/technician1.jpg" alt="技工士の作業風景">
-        <p class="gallery-caption">技工士：作業風景</p>
-      </div>
-      <div class="gallery-item">
-        <img src="image/technician2.jpg" alt="技工士の作業風景２">
-        <p class="gallery-caption">技工士：作業工程</p>
-      </div>
-
-      <!-- 設備：Rapid Shape P20 -->
-      <div class="gallery-item">
-        <img src="image/rapidshape-p20.jpg" alt="Rapid Shape P20 3Dプリンター">
-        <p class="gallery-caption">設備：Rapid Shape P20（3Dプリンター）</p>
-      </div>
-
-      <!-- 設備：MCX5 -->
-      <div class="gallery-item">
-        <img src="image/mcx5.jpg" alt="MCX5 ミリングマシン">
-        <p class="gallery-caption">設備：MCX5 ミリングマシン</p>
-      </div>
-
-      <!-- 設備：ファーネス -->
-      <div class="gallery-item">
-        <img src="image/furnace1.jpg" alt="焼成用ファーネス">
-        <p class="gallery-caption">設備：焼成用ファーネス</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-    <!-- ご利用の流れ -->
-    <section id="flow" class="section section-alt">
+    <section id="gallery" class="section section-alt">
       <div class="container">
-        <h2 class="section-title">ご利用の流れ</h2>
+        <h2 class="section-title fade-up">ギャラリー</h2>
+        <p class="section-lead fade-up">
+          技工士、設備、ラボ環境など、GMSラボの雰囲気をご紹介します。
+        </p>
+
+        <div class="gallery-grid">
+          <div class="gallery-item fade-up">
+            <img src="image/technician1.jpg" alt="技工士の作業風景">
+            <p class="gallery-caption">技工士：作業風景</p>
+          </div>
+          <div class="gallery-item fade-up delay-100">
+            <img src="image/technician2.jpg" alt="技工士の作業風景２">
+            <p class="gallery-caption">技工士：作業工程</p>
+          </div>
+          <div class="gallery-item fade-up delay-200">
+            <img src="image/rapidshape-p20.jpg" alt="Rapid Shape P20">
+            <p class="gallery-caption">設備：Rapid Shape P20</p>
+          </div>
+          <div class="gallery-item fade-up">
+            <img src="image/mcx5.jpg" alt="MCX5">
+            <p class="gallery-caption">設備：MCX5 ミリングマシン</p>
+          </div>
+          <div class="gallery-item fade-up delay-100">
+            <img src="image/furnace1.jpg" alt="焼成用ファーネス">
+            <p class="gallery-caption">設備：焼成用ファーネス</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow" class="section">
+      <div class="container">
+        <h2 class="section-title fade-up">ご利用の流れ</h2>
         <ol class="flow-list">
-          <li>
-            <h3>1. お問い合わせ</h3>
+          <li class="fade-up">
+            <h3>お問い合わせ</h3>
             <p>メールまたはお問い合わせフォームよりご連絡ください。ご希望の技工内容や現在の課題感などをお伺いします。</p>
           </li>
-          <li>
-            <h3>2. お打ち合わせ・条件確認</h3>
+          <li class="fade-up">
+            <h3>お打ち合わせ・条件確認</h3>
             <p>取引条件・納期・送料・データの扱いなどについて確認させていただきます。オンラインでの打ち合わせも対応可能です。</p>
           </li>
-          <li>
-            <h3>3. 模型・データの送付 / 入稿</h3>
+          <li class="fade-up">
+            <h3>模型・データの送付 / 入稿</h3>
             <p>技工物の種類に応じて、模型のご送付またはデジタルデータの入稿をお願いしています。</p>
           </li>
-          <li>
-            <h3>4. 設計・製作</h3>
+          <li class="fade-up">
+            <h3>設計・製作</h3>
             <p>ご指示に基づき、必要に応じてご相談を挟みながら製作を進めます。</p>
           </li>
-          <li>
-            <h3>5. 納品・フィードバック</h3>
+          <li class="fade-up">
+            <h3>納品・フィードバック</h3>
             <p>納品後のご感想や適合状況などのフィードバックをいただき、次回以降の精度向上につなげていきます。</p>
           </li>
         </ol>
       </div>
     </section>
 
-    <!-- 会社情報 -->
-<section id="company" class="section">
-  <div class="container">
-    <h2 class="section-title">会社情報</h2>
-    <dl class="company-info">
-      <div>
-        <dt>会社名</dt><dd>GMS合同会社</dd>
-      </div>
-      <div>
-        <dt>屋号</dt><dd>GMSラボ</dd>
-      </div>
-      <div>
-        <dt>代表者</dt><dd>三谷 順子</dd>
-      </div>
-      <div>
-        <dt>ジェネラルマネージャー</dt><dd>清水 拓郎</dd>
-      </div>
-      <div>
-        <dt>所在地</dt><dd>徳島県徳島市南昭和町1-23-304</dd>
-      </div>
-      <div>
-        <dt>電話番号</dt><dd>070-9136-8261</dd>
-      </div>
-      <div>
-        <dt>メール</dt><dd><a href="mailto:gmslabllc@gmail.com">gmslabllc@gmail.com</a></dd>
-      </div>
-      <div>
-        <dt>事業内容</dt><dd>歯科技工物の設計・製作</dd>
-      </div>
-    </dl>
-  </div>
-</section>
-
-    <!-- お問い合わせ -->
-    <section id="contact" class="section section-alt">
+    <section id="company" class="section section-alt">
       <div class="container">
-        <h2 class="section-title">お問い合わせ</h2>
-        <p class="section-lead">
+        <h2 class="section-title fade-up">会社情報</h2>
+        <dl class="company-info fade-up">
+          <div><dt>会社名</dt><dd>GMS合同会社</dd></div>
+          <div><dt>屋号</dt><dd>GMSラボ</dd></div>
+          <div><dt>代表者</dt><dd>三谷 順子</dd></div>
+          <div><dt>ジェネラルマネージャー</dt><dd>清水 拓郎</dd></div>
+          <div><dt>所在地</dt><dd>徳島県徳島市南昭和町1-23-304</dd></div>
+          <div><dt>電話番号</dt><dd>070-9136-8261</dd></div>
+          <div><dt>メール</dt><dd><a href="mailto:gmslabllc@gmail.com">gmslabllc@gmail.com</a></dd></div>
+          <div><dt>事業内容</dt><dd>歯科技工物の設計・製作</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2 class="section-title fade-up">お問い合わせ</h2>
+        <p class="section-lead fade-up">
           技工物のご依頼・お見積もり・ご相談など、<br class="sp-only">
           下記フォームまたはメールにてお気軽にお問い合わせください。
         </p>
 
         <div class="contact-wrap">
-          <form class="contact-form" action="mailto:gmslabllc@gmail.com" method="post" enctype="text/plain">
+          <form class="contact-form fade-up delay-100" action="mailto:gmslabllc@gmail.com" method="post" enctype="text/plain">
             <div class="form-group">
               <label for="clinic">医院名<span class="required">必須</span></label>
               <input type="text" id="clinic" name="医院名" required />
@@ -286,16 +1038,16 @@
             <button type="submit" class="btn primary full">送信する</button>
           </form>
 
-          <div class="contact-alt">
+          <div class="contact-alt fade-up delay-200">
             <h3>メールでのお問い合わせ</h3>
             <p>
               直接メールでのお問い合わせも受け付けております。<br />
-              <a href="mailto:gmslabllc@gmail.com">gmslabllc@gmail.com</a>
+              <a href="mailto:gmslabllc@gmail.com" style="color:var(--color-primary); font-weight:bold;">gmslabllc@gmail.com</a>
             </p>
             <h3>お電話でのお問い合わせ</h3>
             <p>
-              070-9136-8261<br />
-              ※作業状況により、電話に出られない場合がございます。
+              <span style="font-size:1.5rem; font-weight:bold; color:var(--color-text);">070-9136-8261</span><br />
+              <span style="font-size:0.85rem; color:#999;">※作業状況により、電話に出られない場合がございます。</span>
             </p>
           </div>
         </div>
@@ -311,16 +1063,44 @@
   </footer>
 
   <script>
-    // スマホ用ナビ開閉
+    // ナビゲーション開閉
     const navToggle = document.querySelector('.nav-toggle');
     const mainNav = document.querySelector('.main-nav');
+    const navLinks = document.querySelectorAll('.main-nav a');
 
     if (navToggle && mainNav) {
       navToggle.addEventListener('click', () => {
         mainNav.classList.toggle('is-open');
         navToggle.classList.toggle('is-open');
       });
+
+      // リンククリック時にメニューを閉じる
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mainNav.classList.remove('is-open');
+          navToggle.classList.remove('is-open');
+        });
+      });
     }
+
+    // スクロール連動アニメーション (Intersection Observer)
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -50px 0px', // 画面の下から50px入ったら発火
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); // 一度表示したら監視を終了
+        }
+      });
+    }, observerOptions);
+
+    const fadeElements = document.querySelectorAll('.fade-up');
+    fadeElements.forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
