@@ -197,14 +197,17 @@
        Hero Section
        ========================================= */
     .hero {
-      position: relative;
-      height: 100vh;
-      min-height: 600px;
-      display: flex;
-      align-items: center;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      overflow: hidden;
-    }
+  position: relative;
+  /* 余白が不自然にならないように、高さ固定はやめる */
+  height: auto;
+  min-height: 520px;       /* 必要なら好きな数値に調整してOK */
+  padding-top: 110px;      /* ヘッダー分＋少しだけ余白 */
+  padding-bottom: 80px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow: hidden;
+}
 
     .hero::before {
       content: '';
