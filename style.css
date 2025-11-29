@@ -228,13 +228,13 @@
     }
 
     .hero-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* ← 中央 → 上揃えに変更 */
+  width: 100%;
+}
 
     .hero-text {
       flex: 1;
